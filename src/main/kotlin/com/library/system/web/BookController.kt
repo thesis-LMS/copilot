@@ -12,23 +12,27 @@ import java.util.*
 @RestController
 @RequestMapping("/api/books")
 @Component("webBookController")
-class BookController(private val bookService: BookService) {
-
+class BookController(
+    private val bookService: BookService,
+) {
     @PostMapping
-    fun addBook(@RequestBody book: Book): ResponseEntity<Book> {
+    fun addBook(
+        @RequestBody book: Book,
+    ): ResponseEntity<Book> {
         val savedBook = bookService.addBook(book)
         return ResponseEntity.status(HttpStatus.CREATED).body(savedBook)
     }
 
     @GetMapping("/{id}")
-    fun getBookById(@PathVariable id: UUID): ResponseEntity<Book> {
-        return try {
+    fun getBookById(
+        @PathVariable id: UUID,
+    ): ResponseEntity<Book> =
+        try {
             val book = bookService.getBookById(id)
             ResponseEntity.ok(book)
         } catch (e: Exception) {
             ResponseEntity.notFound().build()
         }
-    }
 
     @GetMapping
     fun getAllBooks(): ResponseEntity<List<Book>> {
@@ -37,7 +41,10 @@ class BookController(private val bookService: BookService) {
     }
 
     @PutMapping("/{id}")
-    fun updateBook(@PathVariable id: UUID, @RequestBody bookDetails: Book): ResponseEntity<Book> {
+    fun updateBook(
+        @PathVariable id: UUID,
+        @RequestBody bookDetails: Book,
+    ): ResponseEntity<Book> {
         return try {
             val updatedBook = bookService.updateBook(id, bookDetails)
             ResponseEntity.ok(updatedBook)
@@ -47,20 +54,21 @@ class BookController(private val bookService: BookService) {
     }
 
     @DeleteMapping("/{id}")
-    fun deleteBookById(@PathVariable id: UUID): ResponseEntity<Void> {
-        return try {
+    fun deleteBookById(
+        @PathVariable id: UUID,
+    ): ResponseEntity<Void> =
+        try {
             bookService.deleteBookById(id)
             ResponseEntity.noContent().build()
         } catch (e: Exception) {
             ResponseEntity.notFound().build()
         }
-    }
 
     @GetMapping("/search")
     fun searchBooks(
         @RequestParam(required = false) title: String?,
         @RequestParam(required = false) author: String?,
-        @RequestParam(required = false) available: String?
+        @RequestParam(required = false) available: String?,
     ): ResponseEntity<List<Book>> {
         val availableBoolean = available?.toBooleanStrictOrNull()
         val books = bookService.searchBooks(title, author, availableBoolean)
@@ -68,7 +76,10 @@ class BookController(private val bookService: BookService) {
     }
 
     @PostMapping("/{bookId}/borrow")
-    fun borrowBook(@PathVariable bookId: UUID, @RequestParam userId: String): ResponseEntity<Book> {
+    fun borrowBook(
+        @PathVariable bookId: UUID,
+        @RequestParam userId: String,
+    ): ResponseEntity<Book> {
         return try {
             val userIdUUID = UUID.fromString(userId)
             val borrowedBook = bookService.borrowBook(bookId, userIdUUID)
@@ -86,7 +97,9 @@ class BookController(private val bookService: BookService) {
     }
 
     @PostMapping("/{bookId}/return")
-    fun returnBook(@PathVariable bookId: UUID): ResponseEntity<Book> {
+    fun returnBook(
+        @PathVariable bookId: UUID,
+    ): ResponseEntity<Book> {
         return try {
             val returnedBook = bookService.returnBook(bookId)
             ResponseEntity.ok(returnedBook)

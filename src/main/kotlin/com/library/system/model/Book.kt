@@ -11,16 +11,11 @@ data class Book(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: UUID? = null,
-
     @Column(nullable = false)
     var title: String,
-
     @Column(nullable = false)
     var author: String,
-
     var available: Boolean = true,
-
     var borrowedByUserId: UUID? = null,
-
-    var dueDate: LocalDate? = null
+    var dueDate: LocalDate? = null,
 )

@@ -11,20 +11,14 @@ data class BorrowingRecord(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: UUID? = null,
-
     @Column(nullable = false)
     val bookId: UUID,
-
     @Column(nullable = false)
     val userId: UUID,
-
     @Column(nullable = false)
     val borrowDate: LocalDate,
-
     @Column(nullable = false)
     val dueDate: LocalDate,
-
     var returnDate: LocalDate? = null,
-
-    var lateFee: Double = 0.0
+    var lateFee: Double = 0.0,
 )
